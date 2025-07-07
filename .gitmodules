@@ -1,6 +1,3 @@
-[submodule "src/externals/dramsim3"]
-	path = src/externals/dramsim3
-	url = https://github.com/umd-memsys/DRAMsim3.git
 [submodule "src/externals/booksim2"]
 	path = src/externals/booksim2
 	url = https://github.com/booksim/booksim2.git
