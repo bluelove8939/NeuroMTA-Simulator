@@ -1,4 +1,6 @@
 add_subdirectory(externals)
+add_subdirectory(neuromta)
+add_subdirectory(tests)
 # add_subdirectory(event_sim)
 # add_subdirectory(event_sim_ip)
 
