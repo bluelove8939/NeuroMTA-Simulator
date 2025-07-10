@@ -13,10 +13,20 @@ add_library(neuromta SHARED
 )
 
 target_include_directories(neuromta PUBLIC 
+    # NeuroMTA indlude directories    
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/common
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules
+    # DRAMSim3 indlude directories
     ${PROJECT_SOURCE_DIR}/src/externals/dramsim3/src
     ${PROJECT_SOURCE_DIR}/src/externals/dramsim3/ext/headers
+    # Booksim2 indlude directories
+    ${PROJECT_SOURCE_DIR}/src/externals/booksim2/src
+    ${PROJECT_SOURCE_DIR}/src/externals/booksim2/src/networks
+    ${PROJECT_SOURCE_DIR}/src/externals/booksim2/src/allocators
+    ${PROJECT_SOURCE_DIR}/src/externals/booksim2/src/arbiters
+    ${PROJECT_SOURCE_DIR}/src/externals/booksim2/src/power
+    ${PROJECT_SOURCE_DIR}/src/externals/booksim2/src/routers
 )
 
 target_compile_options(neuromta PRIVATE -Wall)

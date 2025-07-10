@@ -4,8 +4,28 @@
 
 namespace neuromta {
 
-Core::Core(const int command_queue_depth): _command_queue_depth(command_queue_depth) {}
-Core::~Core() {}
+Core::Core(const int command_queue_depth): _command_queue_depth(command_queue_depth) {
+    this->context_p = new Context();
+    this->context_p->register_core(this->_core_name, this);
+}
+
+Core::~Core() {
+    if (this->_core_name == "_single_core")
+        delete this->context_p;
+}
+
+void Core::register_context(const std::string name, Context *context_p) {
+    if (name == "_single_core")
+        throw NeuroMTARuntimeException("Core", "core name cannot be _single_core");
+
+    if (this->_core_name == "_single_core")
+        delete this->context_p;
+
+    this->_core_name = name;
+    this->context_p = context_p;
+
+    context_p->register_core(name, this);
+}
 
 void Core::register_module(const std::string name, Module *module_p) {
     if (this->_modules.find(name) != this->_modules.end())
@@ -13,14 +33,14 @@ void Core::register_module(const std::string name, Module *module_p) {
 
     this->_modules[name] = module_p;
     module_p->name = name;
-    module_p->context_p = &(this->context);
+    module_p->context_p = this->context_p;
 
     this->_module_id_mappings[name] = this->_modules.size();
 }
 
 void Core::register_debugger(Debugger *debugger_p) {
     this->_debugger_p = debugger_p;
-    debugger_p->context_p = &(this->context);
+    debugger_p->context_p = this->context_p;
 }
 
 Module* Core::get_module(const std::string name) {
@@ -35,8 +55,8 @@ bool Core::is_idle() {
     return this->_command_queue.size() == 0;
 }
 
-void Core::reset_context() {
-    this->context.reset();
+void Core::reset() {
+    // this->context_p->reset();
 }
 
 void Core::submit_command(std::string module_name, Command &command) {
@@ -44,7 +64,7 @@ void Core::submit_command(std::string module_name, Command &command) {
 
     unsigned long int queue_full_iter_cnt = 0;
     while (this->_command_queue.size() >= (long unsigned int)this->_command_queue_depth){
-        this->tick_clock();
+        this->context_p->tick_clock();
         queue_full_iter_cnt++;
 
         if (queue_full_iter_cnt >= this->_single_command_cycle_thres) {
@@ -94,7 +114,7 @@ void Core::tick_clock() {
 
         if (!command_p->is_issued()) {
             if (module_p->issue_command(command_p)) {
-                command_p->issue_time = this->context.get_timestamp();
+                command_p->issue_time = this->context_p->get_timestamp();
             }
         }
 
@@ -106,7 +126,7 @@ void Core::tick_clock() {
         }
     }
 
-    this->context.tick_clock();
+    // this->context.tick_clock();
     for (auto cursor: this->_modules)
         cursor.second->tick_clock();
 }
@@ -138,8 +158,8 @@ CoreO3::CoreO3(
 ): Core(command_queue_depth), 
    _command_queue_window_limit(command_queue_window_limit) {}
 
-void CoreO3::reset_context() {
-    this->context.reset();
+void CoreO3::reset() {
+    // this->context.reset();
     this->_command_queue_window = 1;
 }
 
@@ -169,7 +189,7 @@ void CoreO3::tick_clock() {
         // Issue command (if necessary)
         if (!command_p->is_issued() && dept_flag) {
             if (module_p->issue_command(command_p))
-                command_p->issue_time = this->context.get_timestamp();
+                command_p->issue_time = this->context_p->get_timestamp();
         }
 
         // Update dependency slots
@@ -187,7 +207,7 @@ void CoreO3::tick_clock() {
         }
     }
 
-    this->context.tick_clock();
+    // this->context.tick_clock();
     for (auto cursor: this->_modules)
         cursor.second->tick_clock();
     

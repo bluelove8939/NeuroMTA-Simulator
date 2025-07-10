@@ -383,7 +383,7 @@ int main(int argc, char *argv[]) {
         ofm_slot_num
     );
 
-    device_p->reset_context();
+    device_p->reset();
     device_p->set_single_command_cycle_thres(1000); // The simulation result will be undeterministic unless a single command takes less than 1000 cycles
     device_p->set_synchronization_cycle_thres(10000);  // The simulation result will be undeterministic unless the synchronization phase takes less than 10000 cycles
 
@@ -391,7 +391,7 @@ int main(int argc, char *argv[]) {
 
     gemm_dense_nmk((SAOSCoreBase *)device_p, M, N, K, 1, 1, 4, true, true);
 
-    cout << "simulation terminated at " << device_p->context.get_timestamp() << endl;
+    cout << "simulation terminated at " << device_p->context_p->get_timestamp() << endl;
 
     delete device_p;
 

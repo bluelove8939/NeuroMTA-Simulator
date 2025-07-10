@@ -29,7 +29,7 @@ InterconnectModuleBase::InterconnectModuleBase(
 }
 
 InterconnectModuleBase::~InterconnectModuleBase() {
-    delete this->_tfm_if_vp;
+    delete (MTATrafficManagerInterface *)this->_tfm_if_vp;
 }
 
 bool InterconnectModuleBase::issue_command(Command *command_p) {    

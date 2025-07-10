@@ -28,13 +28,16 @@ protected:
 
     Debugger *_debugger_p = NULL;
 
-public:
-    Context context;
+    std::string _core_name = "__single_core";
 
 public:
-    Core(const int command_queue_depth);
+    Context *context_p;
+
+public:
+    Core(const int command_queue_depth=128);
     virtual ~Core();
 
+    void        register_context(const std::string name, Context *context_p);
     void        register_module(const std::string name, Module *module_p);
     void        register_debugger(Debugger *debugger_p);
     Module*     get_module(const std::string name);
@@ -47,7 +50,7 @@ public:
     
     void        print_command_queue();
     
-    virtual void reset_context();
+    virtual void reset();
     virtual void tick_clock();
     void         synchronize();
 };
@@ -61,7 +64,7 @@ private:
 public:
     CoreO3(const int command_queue_depth, const int command_queue_window_limit);
 
-    virtual void reset_context() override;
+    virtual void reset() override;
     virtual void tick_clock()    override;
 };
 

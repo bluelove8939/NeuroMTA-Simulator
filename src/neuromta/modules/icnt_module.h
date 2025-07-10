@@ -1,6 +1,7 @@
 #ifndef __NEUROMTA_ICNT_MODULE_H
 #define __NEUROMTA_ICNT_MODULE_H
 
+#include <queue>
 #include "common/common.h"
 
 namespace neuromta {
