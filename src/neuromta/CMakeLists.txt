@@ -6,9 +6,9 @@ add_library(neuromta SHARED
     common/core.cc
     common/debugger.cc
     # Modules
-    dma_module.cc
-    icnt_module.cc
-    saos_module.cc
+    modules/dma_module.cc
+    modules/icnt_module.cc
+    modules/saos_module.cc
     # Cores
 )
 

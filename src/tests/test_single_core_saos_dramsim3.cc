@@ -1,7 +1,7 @@
 #include <iostream>
-#include "neuromta/saos_module.h"
-#include "neuromta/dma_module.h"
-#include "neuromta/icnt_module.h"
+#include "neuromta/modules/saos_module.h"
+#include "neuromta/modules/dma_module.h"
+#include "neuromta/modules/icnt_module.h"
 #include "neuromta/common/common.h"
 
 using namespace std;
