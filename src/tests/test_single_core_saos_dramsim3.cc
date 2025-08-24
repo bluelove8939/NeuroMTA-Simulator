@@ -1,7 +1,6 @@
 #include <iostream>
 #include "neuromta/modules/saos_module.h"
 #include "neuromta/modules/dma_module.h"
-#include "neuromta/modules/icnt_module.h"
 #include "neuromta/common/common.h"
 
 using namespace std;
@@ -328,6 +327,11 @@ void gemm_dense_nmk(
 
 
 int main(int argc, char *argv[]) {
+    if (!std::getenv("DRAMSIM3_CONFIG_DIR")) {
+        cerr << "[ERROR] The environment variable \'DRAMSIM3_CONFIG_DIR\' is undefined. You may need to execute \'env.sh\' to properly set environment variables to use externalsmodules including DRAMSim3 and Booksim2." << endl;
+        throw NeuroMTARuntimeException("Runtime", "environment exception");
+    }
+
     const string dramsim_config_dir = std::getenv("DRAMSIM3_CONFIG_DIR");
     const string dramsim_default_out_dir = std::getenv("DRAMSIM3_DEFAULT_OUT_DIR");
 

@@ -51,7 +51,7 @@ public:
     void        print_command_queue();
     
     virtual void reset();
-    virtual void tick_clock();
+    virtual void cycle_step();
     void         synchronize();
 };
 
@@ -64,8 +64,8 @@ private:
 public:
     CoreO3(const int command_queue_depth, const int command_queue_window_limit);
 
-    virtual void reset() override;
-    virtual void tick_clock()    override;
+    virtual void reset()        override;
+    virtual void cycle_step()   override;
 };
 
 }

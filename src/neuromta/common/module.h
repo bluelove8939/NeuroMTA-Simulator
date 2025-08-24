@@ -18,7 +18,7 @@ public:
     virtual ~Module() {}
 
     virtual bool issue_command(Command *command_p) = 0;
-    virtual void tick_clock() = 0;
+    virtual void cycle_step() = 0;
 };
 
 }

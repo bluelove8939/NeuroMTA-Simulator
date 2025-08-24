@@ -107,7 +107,7 @@ void Core::print_command_queue() {
     }
 }
 
-void Core::tick_clock() {
+void Core::cycle_step() {
     if (this->_command_queue.size()) {
         Module  *module_p  = this->_command_queue[0].first;
         Command *command_p = &(this->_command_queue[0].second);
@@ -128,14 +128,14 @@ void Core::tick_clock() {
 
     // this->context.tick_clock();
     for (auto cursor: this->_modules)
-        cursor.second->tick_clock();
+        cursor.second->cycle_step();
 }
 
 void Core::synchronize() {
     long unsigned int tick_iter_cnt = 0;
     
     while (!this->is_idle()) {
-        this->tick_clock();
+        this->cycle_step();
         tick_iter_cnt++;
         
         if (tick_iter_cnt >= this->_synchronization_cycle_thres) {
@@ -163,7 +163,7 @@ void CoreO3::reset() {
     this->_command_queue_window = 1;
 }
 
-void CoreO3::tick_clock() {
+void CoreO3::cycle_step() {
     const int window_end    = std::min<int>(this->_command_queue_window, this->_command_queue.size());
 
     std::set<slot_id_t> dst_dept_slots;
@@ -209,7 +209,7 @@ void CoreO3::tick_clock() {
 
     // this->context.tick_clock();
     for (auto cursor: this->_modules)
-        cursor.second->tick_clock();
+        cursor.second->cycle_step();
     
     this->_command_queue_window = std::min<int>(this->_command_queue_window + 1, this->_command_queue_window_limit);
 

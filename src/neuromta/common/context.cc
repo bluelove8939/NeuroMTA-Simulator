@@ -12,7 +12,7 @@ void Context::reset() {
 
 void Context::tick_clock() {
     for (auto it = this->_registered_cores.begin(); it != this->_registered_cores.end(); it++)
-        it->second->tick_clock();
+        it->second->cycle_step();
     this->_timestamp++;
 }
 

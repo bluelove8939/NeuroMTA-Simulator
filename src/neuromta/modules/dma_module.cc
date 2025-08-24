@@ -52,7 +52,7 @@ bool DMAModule::issue_command(Command *command_p) {
     return false;
 }
 
-void DMAModule::tick_clock() {
+void DMAModule::cycle_step() {
     if (this->_suspended_commands.size()) {
         if (this->_suspended_requests.front() > 0) {
             this->_suspended_requests.front()--;
@@ -161,7 +161,7 @@ bool DRAMSim3DMAModule::issue_command(Command *command_p) {
     return false;
 }
 
-void DRAMSim3DMAModule::tick_clock() {
+void DRAMSim3DMAModule::cycle_step() {
     dramsim3::MemorySystem *_msys_p = (dramsim3::MemorySystem *)(this->_memory_system_p);
 
     _msys_p->ClockTick();

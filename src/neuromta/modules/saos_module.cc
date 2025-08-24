@@ -25,7 +25,7 @@ bool SystolicArrayOS::issue_command(Command *command_p) {
     return false;
 }
 
-void SystolicArrayOS::tick_clock() {
+void SystolicArrayOS::cycle_step() {
     if (this->_request_cnt)
         this->_request_cnt--;
 

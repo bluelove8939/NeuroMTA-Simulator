@@ -41,7 +41,7 @@ bool InterconnectModuleBase::issue_command(Command *command_p) {
     return false;
 }
 
-void InterconnectModuleBase::tick_clock() {
+void InterconnectModuleBase::cycle_step() {
     MTATrafficManagerInterface *_tfm_if_p = (MTATrafficManagerInterface *)(this->_tfm_if_vp);
 
     _tfm_if_p->Step();
@@ -53,6 +53,13 @@ void InterconnectModuleBase::tick_clock() {
             if (_tfm_if_p->IsNodeBusy(n)) {
                 packet_desc = _tfm_if_p->GetPacketDescriptor(n);
                 
+                if (packet_desc.IsControlPacket()) {
+
+                } else if (packet_desc.IsDataPacket()) {
+                    
+                }
+
+                _tfm_if_p->HandlePacket(n);
             }
         }
 
@@ -69,7 +76,7 @@ void InterconnectModuleBase::tick_clock() {
             
             packet_desc = MTAPacketDescriptor::NewDataPacket(addr, size, is_write, false);
         } else if (command_p->action == "control") {
-            packet_desc = MTAPacketDescriptor::NewControlPacket(1, command_p->args, false);
+            packet_desc = MTAPacketDescriptor::NewControlPacket(command_p, sizeof(Command), false);
         }
 
         _tfm_if_p->SendPacket(src_id, dst_id, 0, packet_desc);  // TODO: currently only supports a single subnet
